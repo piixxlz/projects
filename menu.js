@@ -7,9 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 <ul>
                     <li><a href="rootofnightmares.html">Root of Nightmares</a></li>
                     <li><a href="vowofthedisciple.html">Vow of the Disciple </a></li>
+                    <li><a href="lastwish.html">Last Wish </a></li>
                 </ul>
             </nav>
         </header>
     `;
     document.getElementById('menu').innerHTML = menu;
 });
+
