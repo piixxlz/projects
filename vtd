@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Mia</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #main-container {
+            transition: opacity 0.5s ease;
+        }
+
+        /* The Heart */
+        .heart {
+            background-color: #ff4d6d;
+            display: inline-block;
+            height: 150px;
+            margin: 0 10px;
+            position: relative;
+            top: 0;
+            transform: rotate(-45deg);
+            width: 150px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: heartbeat 1.2s infinite;
+        }
+
+        .heart:before, .heart:after {
+            content: "";
+            background-color: #ff4d6d;
+            border-radius: 50%;
+            height: 150px;
+            position: absolute;
+            width: 150px;
+        }
+
+        .heart:before { top: -75px; left: 0; }
+        .heart:after { left: 75px; top: 0; }
+
+        @keyframes heartbeat {
+            0% { transform: rotate(-45deg) scale(1); }
+            20% { transform: rotate(-45deg) scale(1.1); }
+            40% { transform: rotate(-45deg) scale(1); }
+            60% { transform: rotate(-45deg) scale(1.1); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        /* Text inside/on the heart */
+        .heart-text {
+            position: absolute;
+            transform: rotate(45deg);
+            width: 100%;
+            top: 40px;
+            left: 40px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        h1 { color: #c9184a; margin-top: 50px; }
+        
+        .hidden { display: none; }
+
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background-color: #ff758f;
+        }
+
+        .no-btn { background-color: #808080; }
+        .no-btn:hover { background-color: #a0a0a0; }
+
+        /* Error Screen */
+        #error-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            color: #444;
+        }
+        #error-screen h2 { font-size: 5rem; margin: 0; color: #ff4d6d; }
+
+        /* Success Screen */
+        #success-screen {
+            display: none;
+            color: #c9184a;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-container">
+        <div class="heart">
+            <div class="heart-text">Dear Mia...</div>
+        </div>
+        
+        <div id="initial-action">
+            <br><br><br><br>
+            <button onclick="revealQuestion()">Click Me</button>
+        </div>
+
+        <div id="question-area" class="hidden">
+            <h1>Will you be my Valentine?</h1>
+            <button onclick="sayYes()">Yes!</button>
+            <button class="no-btn" onclick="sayNo()">No</button>
+        </div>
+    </div>
+
+    <div id="error-screen">
+        <h2>404</h2>
+        <p><b>Error:</b> Valentine Not Found.</p>
+        <p>The choice "No" is currently unavailable in your region or timeline.</p>
+        <button onclick="location.reload()">Return to Safety</button>
+    </div>
+
+    <div id="success-screen">
+              <h1>:) ❤️ !</h1>
+    </div>
+
+    <script>
+        function revealQuestion() {
+            document.getElementById('initial-action').classList.add('hidden');
+            document.getElementById('question-area').classList.remove('hidden');
+        }
+
+        function sayNo() {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('error-screen').style.display = 'flex';
+        }
+
+        function sayYes() {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+            
+            // Firework effect
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              // since particles fall down, start a bit higher than random
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
